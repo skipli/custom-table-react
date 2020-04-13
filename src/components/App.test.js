@@ -1,32 +1,27 @@
-import React from "react";
 import { shallow } from "enzyme";
-import App from "./App";
+import React from "react";
 import * as api from "../lib/api";
-import { mockUserDiff } from "../mocks/mockUserData";
+import {
+  mockProjectsDiff,
+  mockProjectsDiffError,
+} from "../mocks/mockProjectsData";
+import { mockUsersDiff, mockUsersDiffError } from "../mocks/mockUsersData";
+import App from "./App";
 
 jest.mock("../lib/api");
 
 describe("<App />", () => {
   let wrapper;
   let instance;
-  let state;
 
   beforeEach(() => {
-    jest.mock("../lib/api", () => ({
-      __esModule: true,
-      default: {
-        getProjectsDiff: jest.fn(),
-        getUsersDiff: jest.fn(),
-      },
-    }));
-
     wrapper = shallow(<App />);
+
     instance = wrapper.instance();
-    state = wrapper.state();
   });
 
   describe("render()", () => {
-    it("should render the application", () => {
+    it("should be instance of the component", () => {
       expect(instance instanceof App).toBeTruthy();
     });
 
@@ -40,17 +35,45 @@ describe("<App />", () => {
   });
 
   describe("fetchUserData", () => {
-    it("should set userTableStatus state to LOADING when loading", () => {
-      instance.handleUserData = jest.fn().mockReturnValue({});
-      instance.handleUserData();
-      expect(state.userTableStatus).toBe("LOADING");
+    it("should set userTableStatus state to LOADING when loading", async () => {
+      instance.fetchUserData = jest.fn().mockReturnValue({});
+      await instance.fetchUserData();
+      expect(wrapper.state().userTableStatus).toBe("LOADING");
     });
     it("should set userTableStatus state to COMPLETE when complete", async () => {
+      api.default.getUsersDiff = jest.fn().mockResolvedValue(mockUsersDiff);
+      await instance.fetchUserData();
+      expect(wrapper.state().userTableStatus).toBe("COMPLETE");
+    });
+    it("should set userTableStatus state to ERROR when error happens", async () => {
       api.default.getUsersDiff = jest
         .fn()
-        .mockReturnValue(Promise.resolve(mockUserDiff));
+        .mockRejectedValue(mockUsersDiffError);
       await instance.fetchUserData();
-      expect(state.userTableStatus).toBe("COMPLETE");
+      expect(wrapper.find({ "data-testid": "error-box" })).toBeTruthy();
+      expect(wrapper.state().userTableStatus).toBe("ERROR");
+    });
+  });
+
+  describe("fetchProjectData", () => {
+    it("should set projectTableStatus state to LOADING when loading", async () => {
+      instance.fetchProjectData = jest.fn().mockReturnValue({});
+      await instance.fetchProjectData();
+      expect(wrapper.state().projectTableStatus).toBe("LOADING");
+    });
+    it("should set projectTableStatus state to COMPLETE when complete", async () => {
+      api.default.getProjectsDiff = jest
+        .fn()
+        .mockResolvedValue(mockProjectsDiff);
+      await instance.fetchProjectData();
+      expect(wrapper.state().projectTableStatus).toBe("COMPLETE");
+    });
+    it("should set projectTableStatus state to ERROR when error happens", async () => {
+      api.default.getProjectsDiff = jest
+        .fn()
+        .mockRejectedValue(mockProjectsDiffError);
+      await instance.fetchProjectData();
+      expect(wrapper.state().projectTableStatus).toBe("ERROR");
     });
   });
 });

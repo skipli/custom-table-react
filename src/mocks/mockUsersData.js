@@ -1,4 +1,4 @@
-export const mockUserDiff = {
+export const mockUsersDiff = {
   code: 200,
   data: [
     {
@@ -38,4 +38,9 @@ export const mockUserDiff = {
   limit: 3,
   offset: 0,
   total: 10,
+};
+
+export const mockUsersDiffError = {
+  code: 500,
+  error: "Uknown error",
 };

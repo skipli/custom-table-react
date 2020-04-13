@@ -27,7 +27,7 @@ class App extends Component {
   renderError = (status) => {
     if (status === "ERROR") {
       return (
-        <Box marginTop="20px">
+        <Box data-testid="error-box" marginTop="20px">
           <Typography color="error">
             We had problems fetching your data. Please try again.
           </Typography>
@@ -39,7 +39,7 @@ class App extends Component {
   renderLoader = (status) => {
     if (status === "LOADING") {
       return (
-        <Box marginTop="20px">
+        <Box data-testid="loader-box" marginTop="20px">
           <CircularProgress color="primary" />
         </Box>
       );
@@ -51,7 +51,6 @@ class App extends Component {
     await api
       .getUsersDiff()
       .then((response) => {
-        console.log(response.code === 200);
         if (response.code === 200) {
           this.setState((state) => {
             const userTableData = state.userTableData.concat(response.data);
