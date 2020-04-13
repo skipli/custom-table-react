@@ -14,7 +14,7 @@ export default class CustomTable extends Component {
     };
   }
 
-  renderTableBody() {
+  renderTableBody = () => {
     if (this.props.tableData.length === 0) return;
     let tableData = this.sortTableData();
     return tableData.map((data) => {
@@ -27,23 +27,23 @@ export default class CustomTable extends Component {
         </TableRow>
       );
     });
-  }
+  };
 
   sortDate = () => {
     if (this.state.chronological) this.setState({ chronological: false });
     else this.setState({ chronological: true });
   };
 
-  sortTableData() {
+  sortTableData = () => {
     const sortedData = this.props.tableData.concat().sort((a, b) => {
       return this.compareDates(a.timestamp, b.timestamp);
     });
     if (!this.state.chronological) {
       return sortedData.reverse();
     } else return sortedData;
-  }
+  };
 
-  compareDates(a, b) {
+  compareDates = (a, b) => {
     if (a < b) {
       return -1;
     }
@@ -51,7 +51,7 @@ export default class CustomTable extends Component {
       return 1;
     }
     return 0;
-  }
+  };
 
   render() {
     let theme = createMuiTheme({

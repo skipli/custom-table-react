@@ -24,7 +24,7 @@ class App extends Component {
     };
   }
 
-  renderError(status) {
+  renderError = (status) => {
     if (status === "ERROR") {
       return (
         <Box marginTop="20px">
@@ -34,9 +34,9 @@ class App extends Component {
         </Box>
       );
     }
-  }
+  };
 
-  renderLoader(status) {
+  renderLoader = (status) => {
     if (status === "LOADING") {
       return (
         <Box marginTop="20px">
@@ -44,7 +44,7 @@ class App extends Component {
         </Box>
       );
     }
-  }
+  };
 
   fetchUserData = async () => {
     this.setState({ userTableStatus: "LOADING" });
