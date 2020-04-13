@@ -36,7 +36,7 @@ class App extends Component {
     }
   }
 
-  renderLoading(status) {
+  renderLoader(status) {
     if (status === "LOADING") {
       return (
         <Box marginTop="20px">
@@ -134,7 +134,7 @@ class App extends Component {
       <ThemeProvider theme={theme}>
         <Container component={Paper}>
           <CustomTable tableData={this.state.userTableData} />
-          {this.renderLoading(this.state.userTableStatus)}
+          {this.renderLoader(this.state.userTableStatus)}
           {this.renderError(this.state.userTableStatus)}
           <Box>
             <Button
@@ -148,7 +148,7 @@ class App extends Component {
         </Container>
         <Container component={Paper}>
           <CustomTable tableData={this.state.projectTableData} />
-          {this.renderLoading(this.state.projectTableStatus)}
+          {this.renderLoader(this.state.projectTableStatus)}
           {this.renderError(this.state.projectTableStatus)}
           <Box>
             <Button

@@ -35,7 +35,7 @@ export default class CustomTable extends Component {
   };
 
   sortTableData() {
-    const sortedData = this.props.tableData.sort((a, b) => {
+    const sortedData = this.props.tableData.concat().sort((a, b) => {
       return this.compareDates(a.timestamp, b.timestamp);
     });
     if (!this.state.chronological) {
