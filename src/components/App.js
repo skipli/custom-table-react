@@ -51,6 +51,7 @@ class App extends Component {
     await api
       .getUsersDiff()
       .then((response) => {
+        console.log(response.code === 200);
         if (response.code === 200) {
           this.setState((state) => {
             const userTableData = state.userTableData.concat(response.data);

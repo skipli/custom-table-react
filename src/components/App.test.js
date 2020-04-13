@@ -2,7 +2,7 @@ import React from "react";
 import { shallow } from "enzyme";
 import App from "./App";
 import * as api from "../lib/api";
-import mockUserDiff from "../mocks/mockUserData";
+import { mockUserDiff } from "../mocks/mockUserData";
 
 jest.mock("../lib/api");
 
@@ -12,6 +12,14 @@ describe("<App />", () => {
   let state;
 
   beforeEach(() => {
+    jest.mock("../lib/api", () => ({
+      __esModule: true,
+      default: {
+        getProjectsDiff: jest.fn(),
+        getUsersDiff: jest.fn(),
+      },
+    }));
+
     wrapper = shallow(<App />);
     instance = wrapper.instance();
     state = wrapper.state();
@@ -33,15 +41,15 @@ describe("<App />", () => {
 
   describe("fetchUserData", () => {
     it("should set userTableStatus state to LOADING when loading", () => {
-      instance.fetchUserData = jest.fn().mockReturnValue({});
-      instance.fetchUserData();
+      instance.handleUserData = jest.fn().mockReturnValue({});
+      instance.handleUserData();
       expect(state.userTableStatus).toBe("LOADING");
     });
-    it("should set userTableStatus state to COMPLETE when complete", () => {
-      api.getUsersDiff = jest.fn(() => {
-        return Promise.resolve(mockUserDiff);
-      });
-      instance.fetchUserData();
+    it("should set userTableStatus state to COMPLETE when complete", async () => {
+      api.default.getUsersDiff = jest
+        .fn()
+        .mockReturnValue(Promise.resolve(mockUserDiff));
+      await instance.fetchUserData();
       expect(state.userTableStatus).toBe("COMPLETE");
     });
   });
